@@ -2,12 +2,12 @@ import 'package:ecommerce_app/src/features/authentication/data/fake_auth_reposit
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EmailPasswordSignInController extends StateNotifier<EmailPasswordSignInState> {
+class EmailPasswordSignInController
+    extends StateNotifier<EmailPasswordSignInState> {
   EmailPasswordSignInController({
-    required this.authRepository,
     required EmailPasswordSignInFormType formType,
+    required this.authRepository,
   }) : super(EmailPasswordSignInState(formType: formType));
-
   final FakeAuthRepository authRepository;
 
   Future<bool> submit(String email, String password) async {
@@ -17,12 +17,12 @@ class EmailPasswordSignInController extends StateNotifier<EmailPasswordSignInSta
     return value.hasError == false;
   }
 
-  Future<void> _authenticate(String email, String password) async {
+  Future<void> _authenticate(String email, String password) {
     switch (state.formType) {
-      case EmailPasswordSignInFormType.register:
-        return authRepository.createUserWithEmailAndPassword(email, password);
       case EmailPasswordSignInFormType.signIn:
         return authRepository.signInWithEmailAndPassword(email, password);
+      case EmailPasswordSignInFormType.register:
+        return authRepository.createUserWithEmailAndPassword(email, password);
     }
   }
 
@@ -32,7 +32,8 @@ class EmailPasswordSignInController extends StateNotifier<EmailPasswordSignInSta
 }
 
 final emailPasswordSignInControllerProvider = StateNotifierProvider.autoDispose
-    .family<EmailPasswordSignInController, EmailPasswordSignInState, EmailPasswordSignInFormType>((ref, formType) {
+    .family<EmailPasswordSignInController, EmailPasswordSignInState,
+        EmailPasswordSignInFormType>((ref, formType) {
   final authRepository = ref.watch(authRepositoryProvider);
   return EmailPasswordSignInController(
     authRepository: authRepository,

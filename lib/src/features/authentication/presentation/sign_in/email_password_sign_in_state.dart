@@ -1,6 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/string_validators.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Form type for email & password authentication
 enum EmailPasswordSignInFormType { signIn, register }
@@ -8,8 +9,10 @@ enum EmailPasswordSignInFormType { signIn, register }
 /// Mixin class to be used for client-side email & password validation
 mixin EmailAndPasswordValidators {
   final StringValidator emailSubmitValidator = EmailSubmitRegexValidator();
-  final StringValidator passwordRegisterSubmitValidator = MinLengthStringValidator(8);
-  final StringValidator passwordSignInSubmitValidator = NonEmptyStringValidator();
+  final StringValidator passwordRegisterSubmitValidator =
+      MinLengthStringValidator(8);
+  final StringValidator passwordSignInSubmitValidator =
+      NonEmptyStringValidator();
 }
 
 /// State class for the email & password form.
@@ -24,22 +27,6 @@ class EmailPasswordSignInState with EmailAndPasswordValidators {
 
   bool get isLoading => value.isLoading;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is EmailPasswordSignInState &&
-          runtimeType == other.runtimeType &&
-          formType == other.formType &&
-          value == other.value);
-
-  @override
-  int get hashCode => formType.hashCode ^ value.hashCode;
-
-  @override
-  String toString() {
-    return 'EmailPasswordSignInState{' ' formType: $formType,' ' value: $value,' + '}';
-  }
-
   EmailPasswordSignInState copyWith({
     EmailPasswordSignInFormType? formType,
     AsyncValue<void>? value,
@@ -49,6 +36,22 @@ class EmailPasswordSignInState with EmailAndPasswordValidators {
       value: value ?? this.value,
     );
   }
+
+  @override
+  String toString() =>
+      'EmailPasswordSignInState(formType: $formType, value: $value)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is EmailPasswordSignInState &&
+        other.formType == formType &&
+        other.value == value;
+  }
+
+  @override
+  int get hashCode => formType.hashCode ^ value.hashCode;
 }
 
 extension EmailPasswordSignInStateX on EmailPasswordSignInState {
@@ -114,14 +117,17 @@ extension EmailPasswordSignInStateX on EmailPasswordSignInState {
 
   String? emailErrorText(String email) {
     final bool showErrorText = !canSubmitEmail(email);
-    final String errorText = email.isEmpty ? 'Email can\'t be empty'.hardcoded : 'Invalid email'.hardcoded;
+    final String errorText = email.isEmpty
+        ? 'Email can\'t be empty'.hardcoded
+        : 'Invalid email'.hardcoded;
     return showErrorText ? errorText : null;
   }
 
   String? passwordErrorText(String password) {
     final bool showErrorText = !canSubmitPassword(password);
-    final String errorText =
-        password.isEmpty ? 'Password can\'t be empty'.hardcoded : 'Password is too short'.hardcoded;
+    final String errorText = password.isEmpty
+        ? 'Password can\'t be empty'.hardcoded
+        : 'Password is too short'.hardcoded;
     return showErrorText ? errorText : null;
   }
 }

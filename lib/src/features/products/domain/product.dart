@@ -26,31 +26,33 @@ class Product {
 
   @override
   String toString() {
-    return 'Product{id: $id, imageUrl: $imageUrl, title: $title, description: $description, price: $price, availableQuantity: $availableQuantity, avgRating: $avgRating, numRatings: $numRatings}';
+    return 'Product(id: $id, imageUrl: $imageUrl, title: $title, description: $description, price: $price, availableQuantity: $availableQuantity, avgRating: $avgRating, numRatings: $numRatings)';
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Product &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          imageUrl == other.imageUrl &&
-          title == other.title &&
-          description == other.description &&
-          price == other.price &&
-          availableQuantity == other.availableQuantity &&
-          avgRating == other.avgRating &&
-          numRatings == other.numRatings;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Product &&
+        other.id == id &&
+        other.imageUrl == imageUrl &&
+        other.title == title &&
+        other.description == description &&
+        other.price == price &&
+        other.availableQuantity == availableQuantity &&
+        other.avgRating == avgRating &&
+        other.numRatings == numRatings;
+  }
 
   @override
-  int get hashCode =>
-      id.hashCode ^
-      imageUrl.hashCode ^
-      title.hashCode ^
-      description.hashCode ^
-      price.hashCode ^
-      availableQuantity.hashCode ^
-      avgRating.hashCode ^
-      numRatings.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        imageUrl.hashCode ^
+        title.hashCode ^
+        description.hashCode ^
+        price.hashCode ^
+        availableQuantity.hashCode ^
+        avgRating.hashCode ^
+        numRatings.hashCode;
+  }
 }

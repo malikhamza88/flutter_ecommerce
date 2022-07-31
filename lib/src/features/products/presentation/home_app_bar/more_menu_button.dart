@@ -11,7 +11,7 @@ enum PopupMenuOption {
 }
 
 class MoreMenuButton extends StatelessWidget {
-  const MoreMenuButton({Key? key, this.user}) : super(key: key);
+  const MoreMenuButton({super.key, this.user});
   final AppUser? user;
 
   // * Keys for testing using find.byKey()
@@ -30,20 +30,20 @@ class MoreMenuButton extends StatelessWidget {
             ? <PopupMenuEntry<PopupMenuOption>>[
                 PopupMenuItem(
                   key: ordersKey,
-                  child: Text('Orders'.hardcoded),
                   value: PopupMenuOption.orders,
+                  child: Text('Orders'.hardcoded),
                 ),
                 PopupMenuItem(
                   key: accountKey,
-                  child: Text('Account'.hardcoded),
                   value: PopupMenuOption.account,
+                  child: Text('Account'.hardcoded),
                 ),
               ]
             : <PopupMenuEntry<PopupMenuOption>>[
                 PopupMenuItem(
                   key: signInKey,
-                  child: Text('Sign In'.hardcoded),
                   value: PopupMenuOption.signIn,
+                  child: Text('Sign In'.hardcoded),
                 ),
               ];
       },
