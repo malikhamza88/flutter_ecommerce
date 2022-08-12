@@ -4,14 +4,21 @@ import 'package:ecommerce_app/src/features/authentication/data/fake_auth_reposit
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
+import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/more_menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class AuthRobot {
   AuthRobot(this.tester);
-
   final WidgetTester tester;
+
+  Future<void> openEmailPasswordSignInScreen() async {
+    final finder = find.byKey(MoreMenuButton.signInKey);
+    expect(finder, findsOneWidget);
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
 
   Future<void> pumpEmailPasswordSignInContents({
     required FakeAuthRepository authRepository,
@@ -36,18 +43,45 @@ class AuthRobot {
   }
 
   Future<void> tapEmailAndPasswordSubmitButton() async {
-    final finder = find.byType(PrimaryButton);
-    expect(finder, findsOneWidget);
-    await tester.tap(finder);
-    await tester.pump();
+    final primaryButton = find.byType(PrimaryButton);
+    expect(primaryButton, findsOneWidget);
+    await tester.tap(primaryButton);
+    await tester.pumpAndSettle();
   }
 
-  Future<void> pumpAccountScreen({FakeAuthRepository? repository}) async {
+  Future<void> enterEmail(String email) async {
+    final emailField = find.byKey(EmailPasswordSignInScreen.emailKey);
+    expect(emailField, findsOneWidget);
+    await tester.enterText(emailField, email);
+  }
+
+  Future<void> enterPassword(String password) async {
+    final passwordField = find.byKey(EmailPasswordSignInScreen.passwordKey);
+    expect(passwordField, findsOneWidget);
+    await tester.enterText(passwordField, password);
+  }
+
+  Future<void> signInWithEmailAndPassword() async {
+    await enterEmail('test@test.com');
+    await enterPassword('test1234');
+    await tapEmailAndPasswordSubmitButton();
+  }
+
+  Future<void> openAccountScreen() async {
+    final finder = find.byKey(MoreMenuButton.accountKey);
+    expect(finder, findsOneWidget);
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> pumpAccountScreen({FakeAuthRepository? authRepository}) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          if (repository != null)
-            authRepositoryProvider.overrideWithValue(repository),
+          if (authRepository != null)
+            authRepositoryProvider.overrideWithValue(
+              authRepository,
+            )
         ],
         child: const MaterialApp(
           home: AccountScreen(),
@@ -57,26 +91,26 @@ class AuthRobot {
   }
 
   Future<void> tapLogoutButton() async {
-    final logoutButton = find.text("Logout");
+    final logoutButton = find.text('Logout');
     expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
     await tester.pump();
   }
 
   void expectLogoutDialogFound() {
-    final dialogTitle = find.text("Are you sure?");
+    final dialogTitle = find.text('Are you sure?');
     expect(dialogTitle, findsOneWidget);
   }
 
   Future<void> tapCancelButton() async {
-    final cancelButton = find.text("Cancel");
+    final cancelButton = find.text('Cancel');
     expect(cancelButton, findsOneWidget);
     await tester.tap(cancelButton);
     await tester.pump();
   }
 
   void expectLogoutDialogNotFound() {
-    final dialogTitle = find.text("Are you sure?");
+    final dialogTitle = find.text('Are you sure?');
     expect(dialogTitle, findsNothing);
   }
 
@@ -88,12 +122,12 @@ class AuthRobot {
   }
 
   void expectErrorAlertFound() {
-    final finder = find.text("Error");
+    final finder = find.text('Error');
     expect(finder, findsOneWidget);
   }
 
   void expectErrorAlertNotFound() {
-    final finder = find.text("Error");
+    final finder = find.text('Error');
     expect(finder, findsNothing);
   }
 
