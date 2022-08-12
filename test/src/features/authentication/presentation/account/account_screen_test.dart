@@ -40,7 +40,7 @@ void main() {
       ),
     );
 
-    await r.pumpAccountScreen(repository: authRepository);
+    await r.pumpAccountScreen(authRepository: authRepository);
     await r.tapLogoutButton();
     r.expectLogoutDialogFound();
     await r.tapDialogLogoutButton();
@@ -64,7 +64,7 @@ void main() {
     );
 
     await tester.runAsync(() async {
-      await r.pumpAccountScreen(repository: authRepository);
+      await r.pumpAccountScreen(authRepository: authRepository);
       await r.tapLogoutButton();
       r.expectLogoutDialogFound();
       await r.tapDialogLogoutButton();
