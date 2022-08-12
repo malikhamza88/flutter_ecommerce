@@ -3,49 +3,69 @@ import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const testEmail = "test@gmail.com";
-  const testPassword = "1234";
-  final testUser = AppUser(uid: testEmail.split('').reversed.join(), email: testEmail);
-
-  FakeAuthRepository makeAuthRepository() => FakeAuthRepository(addDelay: false);
-
-  group("FakeAuthRepository", () {
-    test("Current User is null", () {
-      final fakeAuthRepository = makeAuthRepository();
-      expect(fakeAuthRepository.currentUser, null);
-      expect(fakeAuthRepository.authStateChanges(), emits(null));
+  const testEmail = 'test@test.com';
+  const testPassword = '1234';
+  final testUser = AppUser(
+    uid: testEmail.split('').reversed.join(),
+    email: testEmail,
+  );
+  FakeAuthRepository makeAuthRepository() => FakeAuthRepository(
+        addDelay: false,
+      );
+  group('FakeAuthRepository', () {
+    test('currentUser is null', () {
+      final authRepository = makeAuthRepository();
+      addTearDown(authRepository.dispose);
+      expect(authRepository.currentUser, null);
+      expect(authRepository.authStateChanges(), emits(null));
+    });
+    test('currentUser is not null after sign in', () async {
+      final authRepository = makeAuthRepository();
+      addTearDown(authRepository.dispose);
+      await authRepository.signInWithEmailAndPassword(
+        testEmail,
+        testPassword,
+      );
+      expect(authRepository.currentUser, testUser);
+      expect(authRepository.authStateChanges(), emits(testUser));
     });
 
-    test("Current user is not null after sign in", () async {
-      final fakeAuthRepository = makeAuthRepository();
-      await fakeAuthRepository.signInWithEmailAndPassword(testEmail, testPassword);
-      expect(fakeAuthRepository.currentUser, testUser);
-      expect(fakeAuthRepository.authStateChanges(), emits(testUser));
+    test('currentUser is not null after registration', () async {
+      final authRepository = makeAuthRepository();
+      addTearDown(authRepository.dispose);
+      await authRepository.createUserWithEmailAndPassword(
+        testEmail,
+        testPassword,
+      );
+      expect(authRepository.currentUser, testUser);
+      expect(authRepository.authStateChanges(), emits(testUser));
     });
 
-    test("Current user is not null after registration", () async {
-      final fakeAuthRepository = makeAuthRepository();
-      await fakeAuthRepository.createUserWithEmailAndPassword(testEmail, testPassword);
-      expect(fakeAuthRepository.currentUser, testUser);
-      expect(fakeAuthRepository.authStateChanges(), emits(testUser));
+    test('currentUser is null after sign out', () async {
+      final authRepository = makeAuthRepository();
+      addTearDown(authRepository.dispose);
+      await authRepository.signInWithEmailAndPassword(
+        testEmail,
+        testPassword,
+      );
+      expect(authRepository.currentUser, testUser);
+      expect(authRepository.authStateChanges(), emits(testUser));
+
+      await authRepository.signOut();
+      expect(authRepository.currentUser, null);
+      expect(authRepository.authStateChanges(), emits(null));
     });
 
-    test("Current user is null after sign_out", () async {
-      final fakeAuthRepository = makeAuthRepository();
-      await fakeAuthRepository.signInWithEmailAndPassword(testEmail, testPassword);
-
-      expect(fakeAuthRepository.currentUser, testUser);
-      expect(fakeAuthRepository.authStateChanges(), emits(testUser));
-
-      await fakeAuthRepository.signOut();
-      expect(fakeAuthRepository.currentUser, null);
-      expect(fakeAuthRepository.authStateChanges(), emits(null));
-    });
-
-    test("Sign in after dispose throws exception", () async {
-      final fakeAuthRepository = makeAuthRepository();
-      fakeAuthRepository.dispose();
-      expect(() => fakeAuthRepository.signInWithEmailAndPassword(testEmail, testPassword), throwsStateError);
+    test('sign in after dispose throws exception', () {
+      final authRepository = makeAuthRepository();
+      authRepository.dispose();
+      expect(
+        () => authRepository.signInWithEmailAndPassword(
+          testEmail,
+          testPassword,
+        ),
+        throwsStateError,
+      );
     });
   });
 }

@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-const kDialogDefaultKey = Key("dialog-default-key");
+const kDialogDefaultKey = Key('dialog-default-key');
 
 /// Generic function to show a platform-aware Material or Cupertino dialog
 Future<bool?> showAlertDialog({
