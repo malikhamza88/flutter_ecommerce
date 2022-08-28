@@ -3,6 +3,7 @@
         "cupertino",
         "ecommerce",
         "mocktail",
-        "riverpod"
+        "riverpod",
+        "sembast"
     ]
 }
