@@ -5,15 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddToCartController extends StateNotifier<AsyncValue<int>> {
   AddToCartController({required this.cartService}) : super(const AsyncData(1));
-
   final CartService cartService;
 
   void updateQuantity(int quantity) {
     state = AsyncData(quantity);
   }
 
-  Future<void> addItem(ProductID productID) async {
-    final item = Item(productId: productID, quantity: state.value!);
+  Future<void> addItem(ProductID productId) async {
+    final item = Item(productId: productId, quantity: state.value!);
     state = const AsyncLoading();
     final value = await AsyncValue.guard(() => cartService.addItem(item));
     if (value.hasError) {
@@ -27,5 +26,7 @@ class AddToCartController extends StateNotifier<AsyncValue<int>> {
 final addToCartControllerProvider =
     StateNotifierProvider.autoDispose<AddToCartController, AsyncValue<int>>(
         (ref) {
-  return AddToCartController(cartService: ref.watch(cartServiceProvider));
+  return AddToCartController(
+    cartService: ref.watch(cartServiceProvider),
+  );
 });

@@ -24,7 +24,6 @@ class ShoppingCartScreen extends ConsumerWidget {
       (_, state) => state.showAlertDialogOnError(context),
     );
     final state = ref.watch(shoppingCartScreenControllerProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping Cart'.hardcoded),

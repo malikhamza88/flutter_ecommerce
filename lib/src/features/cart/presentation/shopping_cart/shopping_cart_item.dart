@@ -125,7 +125,6 @@ class EditOrRemoveItemWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(shoppingCartScreenControllerProvider);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
