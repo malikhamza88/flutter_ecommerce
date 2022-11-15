@@ -12,7 +12,6 @@ enum CheckoutSubRoute { register, payment }
 /// This is the root widget of the checkout flow, which is composed of 2 pages:
 /// 1. Register page
 /// 2. Payment page
-/// TODO: Show the correct page based on whether the user is signed in.
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -32,7 +31,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     if (user != null) {
       setState(() => _subRoute = CheckoutSubRoute.payment);
     }
-
     _controller = PageController(initialPage: _subRoute.index);
   }
 
@@ -55,7 +53,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     // map subRoute to address
-    final title = _subRoute == CheckoutSubRoute.register ? 'Register'.hardcoded : 'Payment'.hardcoded;
+    final title = _subRoute == CheckoutSubRoute.register
+        ? 'Register'.hardcoded
+        : 'Payment'.hardcoded;
     // * Return a Scaffold with a PageView containing the 2 pages.
     // * This allows for a nice scroll animation when switching between pages.
     // * Note: only the currently active page will be visible.
