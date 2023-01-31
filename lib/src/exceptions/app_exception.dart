@@ -1,4 +1,3 @@
-// app_exception.dart
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,17 +10,13 @@ class AppException with _$AppException {
   const factory AppException.weakPassword() = WeakPassword;
   const factory AppException.wrongPassword() = WrongPassword;
   const factory AppException.userNotFound() = UserNotFound;
-  // Cart
-  const factory AppException.cartSyncFailed() = CartSyncFailed;
-  // Checkout
-  const factory AppException.paymentFailureEmptyCart() = PaymentFailureEmptyCart;
   // Orders
-  const factory AppException.parseOrderFailure(String status) = ParseOrderFailure;
+  const factory AppException.parseOrderFailure(String status) =
+      ParseOrderFailure;
 }
 
 class AppExceptionData {
   AppExceptionData(this.code, this.message);
-
   final String code;
   final String message;
 
@@ -48,16 +43,6 @@ extension AppExceptionDetails on AppException {
       userNotFound: () => AppExceptionData(
         'user-not-found',
         'User not found'.hardcoded,
-      ),
-      // Cart
-      cartSyncFailed: () => AppExceptionData(
-        'cart-sync-failed',
-        'An error has occurred while updating the shopping cart'.hardcoded,
-      ),
-      // Checkout
-      paymentFailureEmptyCart: () => AppExceptionData(
-        'payment-failure-empty-cart',
-        'Can\'t place an order if the cart is empty'.hardcoded,
       ),
       // Orders
       parseOrderFailure: (status) => AppExceptionData(

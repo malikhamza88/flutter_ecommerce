@@ -18,7 +18,8 @@ class CartSyncService {
   final Ref ref;
 
   void _init() {
-    ref.listen<AsyncValue<AppUser?>>(authStateChangesProvider, (previous, next) {
+    ref.listen<AsyncValue<AppUser?>>(authStateChangesProvider,
+        (previous, next) {
       final previousUser = previous?.value;
       final user = next.value;
       if (previousUser == null && user != null) {
@@ -38,7 +39,8 @@ class CartSyncService {
         // Get the remote cart data
         final remoteCartRepository = ref.read(remoteCartRepositoryProvider);
         final remoteCart = await remoteCartRepository.fetchCart(uid);
-        final localItemsToAdd = await _getLocalItemsToAdd(localCart, remoteCart);
+        final localItemsToAdd =
+            await _getLocalItemsToAdd(localCart, remoteCart);
         // Add all the local items to the remote cart
         final updatedRemoteCart = remoteCart.addItems(localItemsToAdd);
         // Write the updated remote cart data to the repository
@@ -51,7 +53,8 @@ class CartSyncService {
     }
   }
 
-  Future<List<Item>> _getLocalItemsToAdd(Cart localCart, Cart remoteCart) async {
+  Future<List<Item>> _getLocalItemsToAdd(
+      Cart localCart, Cart remoteCart) async {
     // Get the list of products (needed to read the available quantities)
     final productsRepository = ref.read(productsRepositoryProvider);
     final products = await productsRepository.fetchProductsList();
@@ -70,7 +73,8 @@ class CartSyncService {
       );
       // if the capped quantity is > 0, add to the list of items to add
       if (cappedLocalQuantity > 0) {
-        localItemsToAdd.add(Item(productId: productId, quantity: cappedLocalQuantity));
+        localItemsToAdd
+            .add(Item(productId: productId, quantity: cappedLocalQuantity));
       }
     }
     return localItemsToAdd;

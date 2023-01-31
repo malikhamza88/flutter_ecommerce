@@ -1,7 +1,6 @@
 import 'package:ecommerce_app/src/exceptions/app_exception.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/fake_app_user.dart';
-import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +18,7 @@ class FakeAuthRepository {
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     await delay(addDelay);
-    // check the given credentials again each registered user
+    // check the given credentials agains each registered user
     for (final u in _users) {
       // matching email and password
       if (u.email == email && u.password == password) {
@@ -34,7 +33,8 @@ class FakeAuthRepository {
     throw const AppException.userNotFound();
   }
 
-  Future<void> createUserWithEmailAndPassword(String email, String password) async {
+  Future<void> createUserWithEmailAndPassword(
+      String email, String password) async {
     await delay(addDelay);
     // check if the email is already in use
     for (final u in _users) {
@@ -44,7 +44,7 @@ class FakeAuthRepository {
     }
     // minimum password length requirement
     if (password.length < 8) {
-      throw const AppException.weakPassword();
+      throw const AppException.userNotFound();
     }
     // create new user
     _createNewUser(email, password);
